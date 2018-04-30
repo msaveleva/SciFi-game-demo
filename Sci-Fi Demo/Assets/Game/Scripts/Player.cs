@@ -15,19 +15,38 @@ public class Player : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		_charaController = GetComponent<CharacterController> ();
+
+        Cursor.lockState = CursorLockMode.Locked;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		float horizontalInput = Input.GetAxis ("Horizontal");
-		float verticalInput = Input.GetAxis ("Vertical");
-		Vector3 direction = new Vector3 (horizontalInput, 0, verticalInput);
-		Vector3 velocity = direction * speed;
-		velocity.y -= kGravity;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            Ray rayOrigin = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0));
+            Physics.Raycast(rayOrigin, Mathf.Infinity);
+
+            Debug.Log("Hit something!");
+        }
+
+        _MovePlayer();
+	}
+
+    void _MovePlayer() {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+        Vector3 direction = new Vector3(horizontalInput, 0, verticalInput);
+        Vector3 velocity = direction * speed;
+        velocity.y -= kGravity;
 
         //transform to global coordinates.
         velocity = transform.transform.TransformDirection(velocity);
 
-		_charaController.Move (velocity * Time.deltaTime);
-	}
+        _charaController.Move(velocity * Time.deltaTime);
+    }
 }
