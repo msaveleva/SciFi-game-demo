@@ -9,6 +9,10 @@ public class Player : MonoBehaviour {
 
 	[SerializeField]
 	private float speed = 3.5f;
+    [SerializeField]
+    private GameObject _muzzleFlash;
+    [SerializeField]
+    private GameObject _hitMarker;
 
 	private CharacterController _charaController;
 
@@ -26,13 +30,22 @@ public class Player : MonoBehaviour {
             Cursor.lockState = CursorLockMode.None;
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.GetKey(KeyCode.Mouse0))
         {
+            _muzzleFlash.SetActive(true);
+
             Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
             RaycastHit raycastHitInfo;
-            Physics.Raycast(rayOrigin, out raycastHitInfo);
-
-            Debug.Log("Hit " + raycastHitInfo.transform.name);
+            if (Physics.Raycast(rayOrigin, out raycastHitInfo))
+            {
+                Debug.Log("Hit: " + raycastHitInfo.transform.name);
+                GameObject hitMarker = Instantiate(_hitMarker, raycastHitInfo.point, Quaternion.LookRotation(raycastHitInfo.normal)) as GameObject;
+                Destroy(hitMarker, 0.2f);
+            }
+        }
+        else
+        {
+            _muzzleFlash.SetActive(false);
         }
 
         _MovePlayer();
