@@ -28,10 +28,11 @@ public class Player : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
-            Ray rayOrigin = Camera.main.ScreenPointToRay(new Vector3(Screen.width / 2.0f, Screen.height / 2.0f, 0));
-            Physics.Raycast(rayOrigin, Mathf.Infinity);
+            Ray rayOrigin = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
+            RaycastHit raycastHitInfo;
+            Physics.Raycast(rayOrigin, out raycastHitInfo);
 
-            Debug.Log("Hit something!");
+            Debug.Log("Hit " + raycastHitInfo.transform.name);
         }
 
         _MovePlayer();
