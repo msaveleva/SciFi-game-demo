@@ -12,7 +12,6 @@ public class SharkShop : MonoBehaviour {
         if (other.tag == "Player" && 
             Input.GetKeyDown(KeyCode.E))
         {
-            Debug.Log("Stay on trigger");
             Player player = other.GetComponent<Player>();
             if (player == null)
             {

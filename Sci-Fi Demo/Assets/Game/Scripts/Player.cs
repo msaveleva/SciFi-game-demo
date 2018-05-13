@@ -87,6 +87,11 @@ public class Player : MonoBehaviour {
 
     void _Shoot()
     {
+        if (!_weapon.active)
+        {
+            return;
+        }
+
         _currentAmo--;
         _uiManager.UpdateAmoTitle(_currentAmo);
 
@@ -104,6 +109,12 @@ public class Player : MonoBehaviour {
             //Debug.Log("Hit: " + raycastHitInfo.transform.name);
             GameObject hitMarker = Instantiate(_hitMarker, raycastHitInfo.point, Quaternion.LookRotation(raycastHitInfo.normal)) as GameObject;
             Destroy(hitMarker, 0.2f);
+
+            Destructable crate = raycastHitInfo.transform.GetComponent<Destructable>();
+            if (crate != null)
+            {
+                crate.DestructCrate();
+            }
         }
     }
 
