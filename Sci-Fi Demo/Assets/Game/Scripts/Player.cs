@@ -17,7 +17,9 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private GameObject _hitMarker;
     [SerializeField]
-    private AudioSource _weapoAudio;
+    private AudioSource _weaponAudio;
+    [SerializeField]
+    private GameObject _weapon;
 
 	private CharacterController _charaController;
     private UIManager _uiManager;
@@ -29,10 +31,11 @@ public class Player : MonoBehaviour {
     // Use this for initialization
     void Start () {
 		_charaController = GetComponent<CharacterController> ();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
         Cursor.lockState = CursorLockMode.Locked;
         _currentAmo = _maxAmo;
-        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        _uiManager.UpdateAmoTitle(_currentAmo);
     }
 	
 	// Update is called once per frame
@@ -48,7 +51,7 @@ public class Player : MonoBehaviour {
         }
         else
         {
-            _weapoAudio.Stop();
+            _weaponAudio.Stop();
             _muzzleFlash.SetActive(false);
         }
 
@@ -64,7 +67,22 @@ public class Player : MonoBehaviour {
     public void CollectTheCoin()
     {
         _numberOfCoins++;
-        _uiManager.CollectedCoin();
+        _uiManager.CollectedCoin(true);
+    }
+
+    public bool BuyWeapon()
+    {
+        if (_numberOfCoins > 0)
+        {
+            _numberOfCoins--;
+            _uiManager.CollectedCoin(false);
+            _weapon.SetActive(true);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     void _Shoot()
@@ -72,9 +90,9 @@ public class Player : MonoBehaviour {
         _currentAmo--;
         _uiManager.UpdateAmoTitle(_currentAmo);
 
-        if (!_weapoAudio.isPlaying)
+        if (!_weaponAudio.isPlaying)
         {
-            _weapoAudio.Play();
+            _weaponAudio.Play();
         }
 
         _muzzleFlash.SetActive(true);
