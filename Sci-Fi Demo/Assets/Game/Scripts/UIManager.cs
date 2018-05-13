@@ -7,9 +7,16 @@ public class UIManager : MonoBehaviour {
 
     [SerializeField]
     private Text _ammoText;
+    [SerializeField]
+    private GameObject _coin;
 
 	public void UpdateAmoTitle(int ammoCount)
     {
         _ammoText.text = "Ammo: " + ammoCount;
+    }
+
+    public void CollectedCoin()
+    {
+        _coin.SetActive(true);
     }
 }

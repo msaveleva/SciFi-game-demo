@@ -6,7 +6,6 @@ public class Player : MonoBehaviour {
 
 	private float kGravity = 9.81f;
 
-
 	[SerializeField]
 	private float _speed = 3.5f;
     [SerializeField]
@@ -25,15 +24,16 @@ public class Player : MonoBehaviour {
 
     private int _maxAmo = 50;
     private bool _isReloading = false;
+    private int _numberOfCoins = 0;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
 		_charaController = GetComponent<CharacterController> ();
 
         Cursor.lockState = CursorLockMode.Locked;
         _currentAmo = _maxAmo;
         _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -60,6 +60,12 @@ public class Player : MonoBehaviour {
 
         _MovePlayer();
 	}
+
+    public void CollectTheCoin()
+    {
+        _numberOfCoins++;
+        _uiManager.CollectedCoin();
+    }
 
     void _Shoot()
     {
